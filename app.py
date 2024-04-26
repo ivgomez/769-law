@@ -13,7 +13,6 @@ from langchain.callbacks import get_openai_callback
 
 @st.cache_resource 
 def create_embeddings():
-    #pdf_url = os.getenv("PDF_URL")
     pdf_url = st.secrets["PDF_URL"]   
     # Downloading and extracting PDF from URL
     with requests.get(pdf_url, verify=False) as response:
@@ -40,7 +39,6 @@ def create_embeddings():
     return knowledge_base
 
 def main():
-    #load_dotenv()
     OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
     st.set_page_config(page_title='Chatea con la Ley 769!')
     st.header('Preguntale a la ley 769')
