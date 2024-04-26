@@ -13,7 +13,7 @@ from langchain.callbacks import get_openai_callback
 
 @st.cache_resource 
 def create_embeddings():
-    pdf_url = st.secrets["PDF_URL"]   
+    pdf_url = os.getenv("PDF_URL") 
     # Downloading and extracting PDF from URL
     with requests.get(pdf_url, verify=False) as response:
         with open("temp_pdf.pdf", "wb") as pdf_file:
@@ -39,7 +39,7 @@ def create_embeddings():
     return knowledge_base
 
 def main():
-    OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+    load_dotenv()
     st.set_page_config(page_title='Chatea con la Ley 769!')
     st.header('Preguntale a la ley 769')
     
@@ -48,7 +48,6 @@ def main():
     user_question = st.text_input('Preguntale a la ley 769:', key='question')
 
     if user_question:
-        os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
         docs = knowledge_base.similarity_search(user_question, 3)
         llm = ChatOpenAI(model_name='gpt-3.5-turbo')
         chain = load_qa_chain(llm, chain_type="stuff")
