@@ -8,6 +8,7 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chat_models import ChatOpenAI
 from langchain.chains.question_answering import load_qa_chain
+from langchain.callbacks import get_openai_callback
 
 
 @st.cache_resource 
@@ -50,8 +51,13 @@ def main():
         docs = knowledge_base.similarity_search(user_question, 3)
         llm = ChatOpenAI(model_name='gpt-3.5-turbo')
         chain = load_qa_chain(llm, chain_type="stuff")
-        respuesta = chain.run(input_documents=docs, question=user_question)
-        st.write(respuesta)    
+        cost = ""
+        with get_openai_callback() as cb:
+            respuesta = chain.run(input_documents=docs, question=user_question)
+            cost = cb     
+        st.write(respuesta) 
+        st.write("---------------")    
+        st.write("cost info:",cost)    
 
 
         
