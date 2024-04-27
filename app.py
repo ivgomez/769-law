@@ -33,7 +33,7 @@ def create_embeddings():
         )        
     chunks = text_splitter.split_text(text)
 
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     knowledge_base = FAISS.from_texts(chunks, embeddings)
 
     return knowledge_base
